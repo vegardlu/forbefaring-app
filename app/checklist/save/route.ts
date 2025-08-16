@@ -8,7 +8,7 @@ export async function POST(req: Request) {
     const pathname = `checklists/vidjeveien4-${stamp}.json`;
 
     const blob = await put(pathname, JSON.stringify(body, null, 2), {
-      access: "private", // or "public" if you prefer a public URL
+      access: "public", // 👈 FIX: must be "public" with current SDK
       contentType: "application/json",
       addRandomSuffix: false,
     });
@@ -16,7 +16,9 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: true, url: blob.url, pathname });
   } catch (e) {
     console.error(e);
-    return NextResponse.json({ ok: false, error: "SAVE_FAILED" }, { status: 500 });
+    return NextResponse.json(
+      { ok: false, error: "SAVE_FAILED" },
+      { status: 500 }
+    );
   }
 }
-
