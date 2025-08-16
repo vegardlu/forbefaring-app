@@ -53,6 +53,38 @@ const AREA_LABELS: Record<AreaKey, string> = {
   DOK: "Dokumentasjon & overlevering",
 };
 
+const saveToCloud = async () => {
+  try {
+    const res = await fetch("/api/checklist/save", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ items, issues }),
+    });
+    const json = await res.json();
+    if (!json.ok) throw new Error("Save failed");
+    alert("Lagret i skyen ✅\n" + json.pathname);
+  } catch (e) {
+    alert("Kunne ikke lagre i skyen ❌");
+  }
+};
+
+const loadLatestFromCloud = async () => {
+  try {
+    const res = await fetch("/api/checklist/latest");
+    const json = await res.json();
+    if (!json.ok || !json.data) {
+      alert("Ingen skylagring funnet ennå");
+      return;
+    }
+    // overwrite local state
+    setItems(json.data.items || []);
+    setIssues(json.data.issues || []);
+    alert("Hentet siste versjon fra skyen ✅");
+  } catch (e) {
+    alert("Kunne ikke hente fra skyen ❌");
+  }
+};
+
 // ---------- Seed data (tilpasset Vidjeveien 4 – Hus 4) ----------
 // Kildene er salgsoppgave/kontrakt/tilvalg dere har delt.
 
@@ -289,13 +321,13 @@ function useLocalStorage<T>(key: string, initial: T) {
     try {
       const raw = localStorage.getItem(key);
       if (raw) setState(JSON.parse(raw));
-    } catch {}
+    } catch { }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {
     try {
       localStorage.setItem(key, JSON.stringify(state));
-    } catch {}
+    } catch { }
   }, [key, state]);
   return [state, setState] as const;
 }
@@ -674,6 +706,12 @@ export default function Page() {
                 className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm shadow-sm hover:bg-gray-50"
               >
                 <FileDown className="h-4 w-4" /> Last ned notater
+              </button>
+              <button onClick={saveToCloud} className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm shadow-sm hover:bg-gray-50">
+                ☁️ Lagre til sky
+              </button>
+              <button onClick={loadLatestFromCloud} className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm shadow-sm hover:bg-gray-50">
+                ⬇️ Hent siste versjon
               </button>
               <button
                 onClick={printPage}
