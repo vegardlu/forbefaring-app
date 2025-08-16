@@ -53,38 +53,6 @@ const AREA_LABELS: Record<AreaKey, string> = {
   DOK: "Dokumentasjon & overlevering",
 };
 
-const saveToCloud = async () => {
-  try {
-    const res = await fetch("/api/checklist/save", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ items, issues }),
-    });
-    const json = await res.json();
-    if (!json.ok) throw new Error("Save failed");
-    alert("Lagret i skyen ✅\n" + json.pathname);
-  } catch (e) {
-    alert("Kunne ikke lagre i skyen ❌");
-  }
-};
-
-const loadLatestFromCloud = async () => {
-  try {
-    const res = await fetch("/api/checklist/latest");
-    const json = await res.json();
-    if (!json.ok || !json.data) {
-      alert("Ingen skylagring funnet ennå");
-      return;
-    }
-    // overwrite local state
-    setItems(json.data.items || []);
-    setIssues(json.data.issues || []);
-    alert("Hentet siste versjon fra skyen ✅");
-  } catch (e) {
-    alert("Kunne ikke hente fra skyen ❌");
-  }
-};
-
 // ---------- Seed data (tilpasset Vidjeveien 4 – Hus 4) ----------
 // Kildene er salgsoppgave/kontrakt/tilvalg dere har delt.
 
@@ -689,6 +657,38 @@ export default function Page() {
   };
 
   const printPage = () => window.print();
+
+  // after hooks and before return()
+  const saveToCloud = async () => {
+    try {
+      const res = await fetch("/api/checklist/save", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ items, issues }),
+      });
+      const json = await res.json();
+      if (!json.ok) throw new Error("Save failed");
+      alert("Lagret i skyen ✅\n" + json.pathname);
+    } catch (e) {
+      alert("Kunne ikke lagre i skyen ❌");
+    }
+  };
+
+  const loadLatestFromCloud = async () => {
+    try {
+      const res = await fetch("/api/checklist/latest");
+      const json = await res.json();
+      if (!json.ok || !json.data) {
+        alert("Ingen skylagring funnet ennå!");
+        return;
+      }
+      setItems(json.data.items || []);
+      setIssues(json.data.issues || []);
+      alert("Hentet siste versjon fra skyen ✅");
+    } catch (e) {
+      alert("Kunne ikke hente fra skyen ❌");
+    }
+  };
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-gray-50 to-white text-gray-900">
