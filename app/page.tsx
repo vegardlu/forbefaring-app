@@ -697,8 +697,8 @@ export default function Page() {
         <div className="mx-auto max-w-6xl px-4 py-3">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h1 className="text-2xl font-semibold">Forbefaring – Vidjeveien 4 (Hus 4)</h1>
-              <p className="text-sm text-gray-600">Ny enebolig – Simensbråten, Oslo. Ta med penn 🖊️ og denne sjekklisten.</p>
+              <h1 className="text-2xl font-semibold">Forbefaring – Vidjeveien 4a</h1>
+              <p className="text-sm text-gray-600">Ny enebolig – Simensbråten, Oslo.</p>
             </div>
             <div className="flex items-center gap-2">
               <button
