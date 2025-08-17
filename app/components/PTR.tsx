@@ -1,21 +1,19 @@
 "use client";
 
 import { useEffect } from "react";
-
 import PullToRefresh from "pulltorefreshjs";
 
 export default function PTR() {
   useEffect(() => {
+    console.log("PTR init running");
+
     PullToRefresh.init({
-      // iOS PWA is picky — target the top-level scroller:
-      mainElement: "html",
-      // only allow when scrolled to top
-      shouldPullToRefresh: () => typeof window !== "undefined" && window.scrollY === 0,
+      mainElement: "body", // try "html" if this doesn’t fire
+      shouldPullToRefresh: () => window.scrollY === 0,
       onRefresh() {
-        // simple full reload
+        console.log("PTR triggered ✅ reloading...");
         window.location.reload();
       },
-      // optional UI strings
       instructionsPullToRefresh: "Dra ned for å oppdatere",
       instructionsReleaseToRefresh: "Slipp for å oppdatere",
       instructionsRefreshing: "Oppdaterer…",
@@ -26,5 +24,5 @@ export default function PTR() {
     };
   }, []);
 
-  return null; // nothing to render
+  return null; // nothing visible
 }
