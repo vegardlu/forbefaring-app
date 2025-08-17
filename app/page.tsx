@@ -713,12 +713,7 @@ export default function Page() {
               <button onClick={loadLatestFromCloud} className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm shadow-sm hover:bg-gray-50">
                 ⬇️ Hent siste versjon
               </button>
-              <button
-                onClick={printPage}
-                className="inline-flex items-center gap-2 rounded-xl bg-black px-3 py-2 text-sm font-medium text-white hover:bg-black/90"
-              >
-                <Printer className="h-4 w-4" /> Skriv ut
-              </button>
+
             </div>
           </div>
           <div className="mt-3">
